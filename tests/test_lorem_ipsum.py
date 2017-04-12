@@ -5,6 +5,7 @@ import string
 from unittest import TestCase
 
 from forgery_py.forgery import lorem_ipsum
+from forgery_py.dictionaries_loader import get_dictionary
 
 
 class LoremIpsumForgeryTestCase(TestCase):
@@ -49,3 +50,12 @@ class LoremIpsumForgeryTestCase(TestCase):
         for paragraph in result:
             assert paragraph.startswith('<p>')
             assert paragraph.endswith('</p>')
+
+    def test_no_punctuation(self):
+        all_words = ' '.join(get_dictionary('lorem_ipsum')).lower().\
+                    replace('\n', '').split(' ')
+
+        result = lorem_ipsum.words(quantity=len(all_words))
+
+        for punctuation in ['.', ',', ';']:
+            assert punctuation not in result
